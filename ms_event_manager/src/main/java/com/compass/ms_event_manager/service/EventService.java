@@ -1,12 +1,12 @@
 package com.compass.ms_event_manager.service;
 
-
+import com.compass.ms_event_manager.client.ViaCepClient;
+import com.compass.ms_event_manager.dto.Address;
 import com.compass.ms_event_manager.model.Event;
 import com.compass.ms_event_manager.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -14,7 +14,19 @@ public class EventService {
     @Autowired
     private EventRepository repository;
 
+    @Autowired
+    private ViaCepClient viaCepClient;
+
     public Event createEvent(Event event) {
+        if (event.getCep() != null) {
+            Address address = viaCepClient.getAddressByCep(event.getCep());
+            if (address != null) {
+                event.setLogradouro(address.getLogradouro());
+                event.setBairro(address.getBairro());
+                event.setCidade(address.getLocalidade());
+                event.setUf(address.getUf());
+            }
+        }
         return repository.save(event);
     }
 
