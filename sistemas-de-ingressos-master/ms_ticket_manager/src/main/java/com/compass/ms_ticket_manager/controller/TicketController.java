@@ -18,12 +18,24 @@ public class TicketController {
     @PostMapping("/create-ticket")
     public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket) {
         Ticket createdTicket = service.createTicket(ticket);
-        return ResponseEntity.ok(createdTicket);
+
+        Ticket responseTicket = new Ticket();
+        responseTicket.setTicketId(createdTicket.getTicketId());
+        responseTicket.setCpf(createdTicket.getCpf());
+        responseTicket.setCustomerName(createdTicket.getCustomerName());
+        responseTicket.setCustomerMail(createdTicket.getCustomerMail());
+        responseTicket.setEvent(createdTicket.getEvent());
+        responseTicket.setBRLtotalAmount(createdTicket.getBRLamount());
+        responseTicket.setUSDtotalAmount(createdTicket.getUSDamount());
+        responseTicket.setStatus("concluído");
+
+        return ResponseEntity.ok(responseTicket);
     }
 
     @GetMapping("/get-ticket/{id}")
     public ResponseEntity<Ticket> getTicketById(@PathVariable String id) {
-        return ResponseEntity.ok(service.getTicketById(id));
+        Ticket ticket = service.getTicketById(id);
+        return ResponseEntity.ok(ticket);
     }
 
     @GetMapping("/get-all-tickets")
@@ -33,7 +45,8 @@ public class TicketController {
 
     @PutMapping("/update-ticket/{id}")
     public ResponseEntity<Ticket> updateTicket(@PathVariable String id, @RequestBody Ticket ticket) {
-        return ResponseEntity.ok(service.updateTicket(id, ticket));
+        Ticket updatedTicket = service.updateTicket(id, ticket);
+        return ResponseEntity.ok(updatedTicket);
     }
 
     @DeleteMapping("/delete-ticket/{id}")
