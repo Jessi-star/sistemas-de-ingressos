@@ -18,8 +18,9 @@ public class EventController {
 
     @PostMapping("/create-event")
     public ResponseEntity<Event> createEvent(@Valid @RequestBody Event event) {
-        return ResponseEntity.ok(service.createEvent(event));
+       return ResponseEntity.ok(service.createEvent(event));
     }
+
 
     @GetMapping("/get-event/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable String id) {

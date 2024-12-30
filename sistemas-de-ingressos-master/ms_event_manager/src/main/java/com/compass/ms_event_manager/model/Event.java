@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotBlank;
 
-@Document(collection = "events")
+@Document(collection = "db_event")
 public class Event {
     @Id
     private String id;
