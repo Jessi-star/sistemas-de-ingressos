@@ -22,6 +22,7 @@ public class Event {
     private String cidade;
     private String uf;
 
+
     public String getId() {
         return id;
     }

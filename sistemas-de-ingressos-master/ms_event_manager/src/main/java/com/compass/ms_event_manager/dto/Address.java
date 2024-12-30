@@ -5,8 +5,16 @@ public class Address {
     private String bairro;
     private String localidade; // cidade
     private String uf;
+    private String cep;
 
 
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
     public String getLogradouro() {
         return logradouro;
     }
