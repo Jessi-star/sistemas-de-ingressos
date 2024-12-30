@@ -4,7 +4,6 @@ import com.compass.ms_ticket_manager.client.EventClient;
 import com.compass.ms_ticket_manager.dto.Event;
 import com.compass.ms_ticket_manager.model.Ticket;
 import com.compass.ms_ticket_manager.repository.TicketRepository;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +20,7 @@ public class TicketService {
     private EventClient eventClient;
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private RabbitMQService rabbitMQService;
 
     public Ticket createTicket(Ticket ticket) {
         Event event = eventClient.getEventById(ticket.getEventId());
@@ -37,7 +36,8 @@ public class TicketService {
 
         Ticket createdTicket = repository.save(ticket);
 
-        rabbitTemplate.convertAndSend("ticket.exchange", "ticket.routing.key", createdTicket);
+
+        rabbitMQService.sendMessage("ticket.exchange", "ticket.routing.key", createdTicket);
 
         return createdTicket;
     }

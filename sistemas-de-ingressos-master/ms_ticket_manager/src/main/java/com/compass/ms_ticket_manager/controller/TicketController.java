@@ -2,8 +2,6 @@ package com.compass.ms_ticket_manager.controller;
 
 import com.compass.ms_ticket_manager.model.Ticket;
 import com.compass.ms_ticket_manager.service.TicketService;
-import jakarta.validation.Valid;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +14,12 @@ public class TicketController {
 
     @Autowired
     private TicketService service;
-    private RabbitTemplate rabbitTemplate;
 
     @PostMapping("/create-ticket")
-    public ResponseEntity<Ticket> createTicket(@Valid @RequestBody Ticket ticket) {
+    public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket) {
         Ticket createdTicket = service.createTicket(ticket);
-        rabbitTemplate.convertAndSend("ticket.exchange", "ticket.routing.key", createdTicket);
         return ResponseEntity.ok(createdTicket);
     }
-
 
     @GetMapping("/get-ticket/{id}")
     public ResponseEntity<Ticket> getTicketById(@PathVariable String id) {
@@ -37,7 +32,7 @@ public class TicketController {
     }
 
     @PutMapping("/update-ticket/{id}")
-    public ResponseEntity<Ticket> updateTicket(@PathVariable String id, @Valid @RequestBody Ticket ticket) {
+    public ResponseEntity<Ticket> updateTicket(@PathVariable String id, @RequestBody Ticket ticket) {
         return ResponseEntity.ok(service.updateTicket(id, ticket));
     }
 
@@ -47,4 +42,3 @@ public class TicketController {
         return ResponseEntity.noContent().build();
     }
 }
-
