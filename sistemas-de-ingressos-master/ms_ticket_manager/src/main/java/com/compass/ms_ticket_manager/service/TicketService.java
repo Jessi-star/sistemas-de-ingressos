@@ -1,20 +1,14 @@
 package com.compass.ms_ticket_manager.service;
 
 import com.compass.ms_ticket_manager.client.EventClient;
-import com.compass.ms_ticket_manager.dto.Event;
+import com.compass.ms_ticket_manager.model.Event;
 import com.compass.ms_ticket_manager.model.Ticket;
 import com.compass.ms_ticket_manager.repository.TicketRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.UUID;
-
-import java.util.List;
 
 @Service
 public class TicketService {
-    private static final Logger logger = LoggerFactory.getLogger(TicketService.class);
 
     @Autowired
     private TicketRepository ticketRepository;
@@ -22,56 +16,48 @@ public class TicketService {
     @Autowired
     private EventClient eventClient;
 
-    @Autowired
-    private RabbitMQService rabbitMQService;
-
     public Ticket createTicket(Ticket ticket) {
-        ticket.setTicketId(UUID.randomUUID().toString());
-
-        Event event = eventClient.getEventById(ticket.getEventId());
-        if (event == null) {
-            throw new RuntimeException("Evento não encontrado para ID: " + ticket.getEventId());
+        if (ticket.getEvent() == null || ticket.getEvent().getId() == null || ticket.getEvent().getId().isEmpty()) {
+            throw new RuntimeException("O ID do evento é obrigatório para criar um ticket.");
         }
 
-        ticket.setEventName(event.getName());
-        ticket.setLocation(event.getLocation());
-        ticket.setDate(event.getDate());
-        ticket.setBRLamount(ticket.getBRLamount());
-        ticket.setUSDamount(ticket.getUSDamount());
+        String eventId = ticket.getEvent().getId();
+        Event event = eventClient.getEventById(eventId);
+        ticket.setEvent(event);
         ticket.setStatus("concluído");
-        Ticket savedTicket = ticketRepository.save(ticket);
 
-        Ticket outputTicket = new Ticket();
-        outputTicket.setTicketId(savedTicket.getTicketId());
-        outputTicket.setCpf(savedTicket.getCpf());
-        outputTicket.setCustomerName(savedTicket.getCustomerName());
-        outputTicket.setCustomerMail(savedTicket.getCustomerMail());
-        outputTicket.setEvent(savedTicket.getEvent());
-        outputTicket.setBRLtotalAmount(savedTicket.getBRLamount());
-        outputTicket.setUSDtotalAmount(savedTicket.getUSDamount());
-        outputTicket.setStatus(savedTicket.getStatus());
-
-        return outputTicket;
+        return ticketRepository.save(ticket);
     }
+
 
     public Ticket getTicketById(String id) {
-        return ticketRepository.findById(id).orElseThrow(() -> new RuntimeException("Ingresso não encontrado"));
+        return ticketRepository.findById(id).orElseThrow(() ->
+                new RuntimeException("Ingresso não encontrado com o ID: " + id)
+        );
     }
 
-    public List<Ticket> getAllTickets() {
+    public Iterable<Ticket> getAllTickets() {
         return ticketRepository.findAll();
     }
 
     public Ticket updateTicket(String id, Ticket updatedTicket) {
-        Ticket existingTicket = getTicketById(id);
+        Ticket existingTicket = ticketRepository.findById(id).orElseThrow(() ->
+                new RuntimeException("Ingresso não encontrado com o ID: " + id)
+        );
+
         existingTicket.setCustomerName(updatedTicket.getCustomerName());
-        existingTicket.setBRLamount(updatedTicket.getBRLamount());
-        existingTicket.setUSDamount(updatedTicket.getUSDamount());
+        existingTicket.setCustomerMail(updatedTicket.getCustomerMail());
+        existingTicket.setBrlTotalAmount(updatedTicket.getBrlTotalAmount());
+        existingTicket.setUsdTotalAmount(updatedTicket.getUsdTotalAmount());
 
         return ticketRepository.save(existingTicket);
     }
 
     public void deleteTicket(String id) {
-        ticketRepository.deleteById(id);
+        Ticket ticket = ticketRepository.findById(id).orElseThrow(() ->
+                new RuntimeException("Ingresso não encontrado com o ID: " + id)
+        );
+
+        ticketRepository.delete(ticket);
     }
 }
