@@ -1,15 +1,15 @@
 package com.compass.ms_ticket_manager.model;
 
 public class Event {
-    private String id; // ID do evento
-    private String name; // Nome do evento
-    private String eventDateTime; // Data e horário do evento
+    private String id;
+    private String name;
+    private String eventDateTime;
     private String logradouro;
     private String bairro;
     private String cidade;
     private String uf;
 
-    // Getters e setters para todos os campos
+
     public String getId() {
         return id;
     }

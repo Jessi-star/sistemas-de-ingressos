@@ -31,7 +31,6 @@ public class TicketController {
 
     @GetMapping("/list-all-tickets")
     public ResponseEntity<List<Ticket>> getAllTickets() {
-        // Converte o Iterable para uma List
         List<Ticket> tickets = StreamSupport
                 .stream(ticketService.getAllTickets().spliterator(), false)
                 .collect(Collectors.toList());
