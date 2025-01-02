@@ -1,6 +1,5 @@
 package com.compass.ms_ticket_manager.config;
 
-import com.compass.ms_ticket_manager.service.TicketMessageListener;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -40,13 +39,9 @@ public class RabbitMQConfig {
     public SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(QUEUE_NAME);
+        container.setQueueNames("ticket-queue");
         container.setMessageListener(listenerAdapter);
         return container;
     }
 
-    @Bean
-    public MessageListenerAdapter listenerAdapter(TicketMessageListener listener) {
-        return new MessageListenerAdapter(listener, "onMessage");
-    }
 }
