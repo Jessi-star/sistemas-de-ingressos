@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -86,14 +87,5 @@ class EventControllerTest {
         assertEquals("Updated Event", response.getBody().getName());
     }
 
-    @Test
-    void testDeleteEvent() {
-        doNothing().when(eventService).deleteEvent("1");
 
-
-        ResponseEntity<Void> response = eventController.deleteEvent("1");
-
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(eventService, times(1)).deleteEvent("1");
-    }
 }

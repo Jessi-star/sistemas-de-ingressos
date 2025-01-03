@@ -60,4 +60,8 @@ public class TicketService {
 
         ticketRepository.delete(ticket);
     }
+
+    public boolean checkTicketsByEvent(String eventId) {
+        return ticketRepository.existsByEventId(eventId);
+    }
 }

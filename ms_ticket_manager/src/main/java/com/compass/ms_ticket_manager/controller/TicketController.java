@@ -48,4 +48,10 @@ public class TicketController {
         ticketService.deleteTicket(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/check-tickets-by-event/{eventId}")
+    public ResponseEntity<Boolean> checkTicketsByEvent(@PathVariable String eventId) {
+        boolean hasTickets = ticketService.checkTicketsByEvent(eventId);
+        return ResponseEntity.ok(hasTickets);
+    }
 }
