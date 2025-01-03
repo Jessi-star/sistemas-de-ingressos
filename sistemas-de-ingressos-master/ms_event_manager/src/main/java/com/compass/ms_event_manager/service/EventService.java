@@ -13,10 +13,15 @@ import java.util.List;
 @Service
 public class EventService {
     @Autowired
-    private EventRepository repository;
+    private  final EventRepository repository;
 
     @Autowired
-    private ViaCepClient viaCepClient;
+    private final ViaCepClient viaCepClient;
+
+    public EventService(EventRepository repository, ViaCepClient viaCepClient) {
+        this.repository = repository;
+        this.viaCepClient = viaCepClient;
+    }
 
     public Event createEvent(Event event) {
         if (event.getCep() != null) {
