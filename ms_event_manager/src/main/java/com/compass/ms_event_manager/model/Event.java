@@ -15,7 +15,7 @@ public class Event {
     @NotBlank(message = "A descrição do evento é obrigatória")
     private String description;
     private String location;
-    private String date;
+    private String eventdate;
     private String cep;
     private String logradouro;
     private String bairro;
@@ -55,12 +55,12 @@ public class Event {
         this.location = location;
     }
 
-    public String getDate() {
-        return date;
+    public String getEventdate() {
+        return eventdate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setEventdate(String date) {
+        this.eventdate = date;
     }
 
     public String getCep() {

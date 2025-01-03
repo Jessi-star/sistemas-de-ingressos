@@ -49,7 +49,7 @@ public class EventService {
         existingEvent.setName(updatedEvent.getName());
         existingEvent.setDescription(updatedEvent.getDescription());
         existingEvent.setLocation(updatedEvent.getLocation());
-        existingEvent.setDate(updatedEvent.getDate());
+        existingEvent.setEventdate(updatedEvent.getEventdate());
         return repository.save(existingEvent);
     }
 
