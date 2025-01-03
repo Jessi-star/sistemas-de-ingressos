@@ -3,7 +3,7 @@ package com.compass.ms_ticket_manager.model;
 public class Event {
     private String id;
     private String name;
-    private String eventDateTime;
+    private String eventdate;
     private String logradouro;
     private String bairro;
     private String cidade;
@@ -26,12 +26,12 @@ public class Event {
         this.name = name;
     }
 
-    public String getEventDateTime() {
-        return eventDateTime;
+    public String getEventdate() {
+        return eventdate;
     }
 
-    public void setEventDateTime(String eventDateTime) {
-        this.eventDateTime = eventDateTime;
+    public void setEventDate(String eventDateTime) {
+        this.eventdate = eventDateTime;
     }
 
     public String getLogradouro() {
