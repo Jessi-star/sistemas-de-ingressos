@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  ms_event_manager:
+    build:
+      context: ./ms_event_manager
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+      - rabbitmq
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - RABBITMQ_HOST=rabbitmq
+      - MONGO_URI=mongodb://mongo:27017/db_event
+
+  ms_ticket_manager:
+    build:
+      context: ./ms_ticket_manager
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+      - rabbitmq
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - RABBITMQ_HOST=rabbitmq
+      - MONGO_URI=mongodb://mongo:27017/db_ticket
+      - MS_EVENT_MANAGER_URL=http://ms_event_manager:8080/events/v1
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+volumes:
+  mongo-data:
