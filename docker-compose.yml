@@ -27,7 +27,7 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       - RABBITMQ_HOST=rabbitmq
       - MONGO_URI=mongodb+srv://root:Ykmxxi1iqoqS7NWP@cluster0.mongodb.net/db_ticket
-      - MS_EVENT_MANAGER_URL=http://ms_event_manager:8080/events/v1
+      - MS_EVENT_MANAGER_URL=http://18.117.173.186:8080/events/v1
     restart: always
 
   rabbitmq:
