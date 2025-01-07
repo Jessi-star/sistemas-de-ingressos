@@ -45,7 +45,7 @@ public class EventController {
 
     @DeleteMapping("/delete-event/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable String id) {
-        String url = "http://localhost:8081/tickets/v1/check-tickets-by-event/" + id;
+        String url = "http://18.117.173.186:8081/tickets/v1/check-tickets-by-event/" + id;
         Boolean hasTickets = restTemplate.getForObject(url, Boolean.class);
 
         if (Boolean.TRUE.equals(hasTickets)) {
